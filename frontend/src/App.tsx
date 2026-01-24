@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { 
   LoginScreen, 
+  SignupScreen,
   TradingCenter, 
   Portfolio, 
   BacktestingLab, 
   MyPage, 
   MarketNews 
-} from "@/pages";
+} from "@/components";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/hooks";
 import { 
@@ -34,26 +35,48 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type Screen = "login" | "trading" | "portfolio" | "backtesting" | "mypage" | "news";
+type Screen = "login" | "signup" | "trading" | "portfolio" | "backtesting" | "mypage" | "news";
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("login");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [nickname, setNickname] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
   const { isDark, toggleTheme } = useTheme();
 
-  const handleLogin = () => {
+  const handleLogin = (userNickname: string) => {
+    setNickname(userNickname);
+    setIsLoggedIn(true);
+    setCurrentScreen("trading");
+  };
+
+  const handleSignup = (userNickname: string) => {
+    setNickname(userNickname);
     setIsLoggedIn(true);
     setCurrentScreen("trading");
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setNickname("");
     setCurrentScreen("login");
   };
 
   if (!isLoggedIn) {
-    return <LoginScreen onLogin={handleLogin} />;
+    if (currentScreen === "signup") {
+      return (
+        <SignupScreen 
+          onSignup={handleSignup} 
+          onBackToLogin={() => setCurrentScreen("login")} 
+        />
+      );
+    }
+    return (
+      <LoginScreen 
+        onLogin={handleLogin} 
+        onSignupClick={() => setCurrentScreen("signup")} 
+      />
+    );
   }
 
   const navItems = [
@@ -191,7 +214,7 @@ export default function App() {
                     <div className="w-8 h-8 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center">
                       <User className="w-4 h-4 text-white" />
                     </div>
-                    <span className={`hidden md:inline font-medium ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>홍길동</span>
+                    <span className={`hidden md:inline font-medium ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>{nickname}</span>
                     <ChevronDown className="w-4 h-4" />
                   </Button>
                 </DropdownMenuTrigger>

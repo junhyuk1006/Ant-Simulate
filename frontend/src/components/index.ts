@@ -9,6 +9,7 @@ export * from './ui';
 
 // 페이지 컴포넌트
 export * from './pages/LoginScreen';
+export * from './pages/SignupScreen';
 export * from './pages/TradingCenter';
 export * from './pages/Portfolio';
 export * from './pages/BacktestingLab';

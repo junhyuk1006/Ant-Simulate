@@ -6,6 +6,7 @@
 
 // 기존 컴포넌트들을 재export (점진적 마이그레이션)
 export { LoginScreen } from "@/components/pages/LoginScreen";
+export { SignupScreen } from "@/components/pages/SignupScreen";
 export { TradingCenter } from "@/components/pages/TradingCenter";
 export { Portfolio } from "@/components/pages/Portfolio";
 export { BacktestingLab } from "@/components/pages/BacktestingLab";
