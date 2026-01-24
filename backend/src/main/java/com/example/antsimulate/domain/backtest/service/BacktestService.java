@@ -1,6 +1,7 @@
 package com.example.antsimulate.domain.backtest.service;
 
 import com.example.antsimulate.domain.backtest.dto.BacktestRequest;
+import com.example.antsimulate.domain.backtest.dto.BacktestResponse;
 import com.example.antsimulate.global.exception.BacktestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ public class BacktestService {
 
     private final RestClient restClient;
 
-    public String executeBacktest(BacktestRequest request) {
+    public BacktestResponse executeBacktest(BacktestRequest request) {
         log.info("execute backtest : {}", request.ticker());
 
         return restClient.post()
@@ -28,7 +29,7 @@ public class BacktestService {
                     log.error("FastAPI Error: {} {}", res.getStatusCode(), res.getStatusText());
                     throw new BacktestException("FastAPI 서버 통신 중 오류 발생: " + res.getStatusCode());
                 })
-                .body(String.class);
+                .body(BacktestResponse.class);
     }
 
 }
