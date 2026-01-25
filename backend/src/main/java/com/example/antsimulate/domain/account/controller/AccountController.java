@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
     private final AccountService accountService;
 
-    @GetMapping("{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getAccount(@PathVariable Long userId){
         GetAccountResponse response = accountService.getAccount(userId);
         return ResponseEntity.ok(response); // 상태코드 200
