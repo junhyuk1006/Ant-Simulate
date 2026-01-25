@@ -2,10 +2,7 @@ package com.example.antsimulate.domain.account.entity;
 
 import com.example.antsimulate.domain.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -16,6 +13,7 @@ import java.time.ZoneOffset;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +24,10 @@ public class Account {
     private User user;
 
     @Column(nullable = false, name = "start_asset")
-    private int startAsset;
+    private long startAsset;
 
     @Column(nullable = false, name= "total_asset")
-    private int totalAsset;
+    private long totalAsset;
 
     @Column(nullable = false, name="account_name")
     private String accountName;

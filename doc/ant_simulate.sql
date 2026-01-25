@@ -196,3 +196,7 @@ DROP INDEX IF EXISTS uq_stock_items_symbol;
 DROP INDEX IF EXISTS uq_stock_items_name;
 
 CREATE UNIQUE INDEX uq_stock_items_symbol ON stock_items (stock_symbol, stock_type);
+
+
+ALTER TABLE account
+ALTER COLUMN account_name DROP NOT NULL;

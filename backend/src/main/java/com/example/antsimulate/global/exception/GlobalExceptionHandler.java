@@ -22,4 +22,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleLoginFailed(LoginFailedException e){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ResponseEntity<String> handleAccountNotFoung(AccountNotFoundException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.antsimulate.domain.auth.service;
 
+import com.example.antsimulate.domain.account.service.AccountService;
 import com.example.antsimulate.domain.auth.dto.LoginRequest;
 import com.example.antsimulate.domain.auth.dto.LoginResponse;
 import com.example.antsimulate.domain.auth.dto.SignupRequest;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AccountService accountService;
 
     public SignupResponse signup(SignupRequest request){
         String email = request.getEmail();
@@ -35,6 +37,8 @@ public class AuthService {
 
         User user = User.builder().email(email).password(encodedPassword).name(name).nickname(nickname).build();
         User savedUser = userRepository.save(user);
+
+        accountService.createAccount(savedUser.getId());
 
         return new SignupResponse(savedUser.getName(), savedUser.getNickname());
     }
