@@ -54,7 +54,6 @@ COMMENT ON TABLE stock_items IS '종목';
 COMMENT ON COLUMN stock_items.stock_symbol IS '종목코드';
 COMMENT ON COLUMN stock_items.stock_name IS '종목명';
 
-
 /* =========================================
    5) account
    ========================================= */
@@ -174,8 +173,38 @@ COMMENT ON COLUMN transactions.price IS '매수/매도 가격(원)';
 COMMENT ON COLUMN transactions.quantity IS '수량';
 COMMENT ON COLUMN transactions.created_at IS '생성시간';
 
--- ✅ 이제 hypertable 전환 (에러 안 남)
+-- TimescaleDB: hypertable 변환
 SELECT create_hypertable('transactions', 'created_at', if_not_exists => TRUE);
 
 CREATE INDEX ix_tx_account_time ON transactions (account_id, created_at DESC);
 CREATE INDEX ix_tx_stock_time   ON transactions (stock_item_id, created_at DESC);
+
+/* =========================================
+   수정
+   ========================================= */
+
+ALTER TABLE stock_items
+  ADD COLUMN stock_type varchar NOT NULL,
+  ADD COLUMN stock_country varchar NOT NULL,
+  ADD COLUMN stock_alias varchar NULL;
+
+COMMENT ON COLUMN stock_items.stock_type IS '종목유형(KOSPI/NASDAQ등)';
+COMMENT ON COLUMN stock_items.stock_country IS '국가코드(KR, US 등)';
+COMMENT ON COLUMN stock_items.stock_alias IS '종목별칭';
+
+DROP INDEX IF EXISTS uq_stock_items_symbol;
+DROP INDEX IF EXISTS uq_stock_items_name;
+
+CREATE UNIQUE INDEX uq_stock_items_symbol ON stock_items (stock_symbol, stock_type);
+
+/* =========================================
+   주식종목정보 데이터 삽입
+   ========================================= */
+
+COPY stock_items (stock_name, stock_type, stock_symbol)
+FROM 'C:\Users\whdid\project\ant-simulate\한국주식종목.xls'
+WITH (
+  FORMAT csv,
+  HEADER true,
+  ENCODING 'UTF8'
+);
