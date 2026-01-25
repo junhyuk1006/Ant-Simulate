@@ -196,15 +196,3 @@ DROP INDEX IF EXISTS uq_stock_items_symbol;
 DROP INDEX IF EXISTS uq_stock_items_name;
 
 CREATE UNIQUE INDEX uq_stock_items_symbol ON stock_items (stock_symbol, stock_type);
-
-/* =========================================
-   주식종목정보 데이터 삽입
-   ========================================= */
-
-COPY stock_items (stock_name, stock_type, stock_symbol)
-FROM 'C:\Users\whdid\project\ant-simulate\한국주식종목.xls'
-WITH (
-  FORMAT csv,
-  HEADER true,
-  ENCODING 'UTF8'
-);
