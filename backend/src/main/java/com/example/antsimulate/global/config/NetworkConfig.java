@@ -11,6 +11,10 @@ import java.util.concurrent.Executors;
 
 @Configuration
 public class NetworkConfig {
+    @Bean
+    public RestClient.Builder restClientBuilder() {
+        return RestClient.builder();
+    }
 
     @Bean
     public RestClient restClient(RestClient.Builder builder) {
