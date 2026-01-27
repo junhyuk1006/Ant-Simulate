@@ -32,5 +32,6 @@ logging:
     org.hibernate.orm.jdbc.bind: trace
     root: info
 
-alphavantage:
-  api-key: ${API_KEY}
+twelvedata:
+  base-url: https://api.twelvedata.com
+  api-key: ${TWELVE_DATA_API_KEY}
