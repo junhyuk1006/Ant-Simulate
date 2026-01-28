@@ -2,6 +2,9 @@ package com.example.antsimulate.domain.stock.dto;
 
 import lombok.AllArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @AllArgsConstructor
 public class GetStockPriceDailyResponse {
     private Long stockPriceDailyId;
