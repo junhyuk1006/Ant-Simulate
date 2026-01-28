@@ -13,9 +13,12 @@ public class StockItemQueryRepository {
 
     public List<StockITemRows> findTodayTargets(int limit){
         String sql = """
-                SELECT id, stock_symbol
-                FROM stock_items
-                WHERE stock_type = 'NASDAQ'
+                SELECT si.id, si.stock_symbol
+                FROM stock_items si
+                LEFT JOIN stock_price_daily spd
+                ON si.id = spd.stock_item_id
+                WHERE si.stock_type = 'NASDAQ'
+                AND spd.stock_item_id IS NULL
                 ORDER BY id
                 LIMIT ?
                 """;
