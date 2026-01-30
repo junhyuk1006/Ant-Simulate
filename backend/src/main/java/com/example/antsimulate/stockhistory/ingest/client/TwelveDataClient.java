@@ -1,6 +1,6 @@
-package com.example.antsimulate.stockdata.ingest.client;
+package com.example.antsimulate.stockhistory.ingest.client;
 
-import com.example.antsimulate.stockdata.ingest.dto.TwelveTimeSeriesResponse;
+import com.example.antsimulate.stockhistory.ingest.dto.TwelveTimeSeriesResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;

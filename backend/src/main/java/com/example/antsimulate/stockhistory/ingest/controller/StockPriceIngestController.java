@@ -1,6 +1,6 @@
-package com.example.antsimulate.stockdata.ingest.controller;
+package com.example.antsimulate.stockhistory.ingest.controller;
 
-import com.example.antsimulate.stockdata.ingest.service.StockPriceDailyIngestService;
+import com.example.antsimulate.stockhistory.ingest.service.StockPriceDailyIngestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;

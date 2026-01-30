@@ -1,4 +1,4 @@
-package com.example.antsimulate.stockdata.ingest.repository;
+package com.example.antsimulate.stockhistory.ingest.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

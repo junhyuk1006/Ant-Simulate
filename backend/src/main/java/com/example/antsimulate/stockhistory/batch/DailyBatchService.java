@@ -1,7 +1,7 @@
-package com.example.antsimulate.stockdata.batch;
+package com.example.antsimulate.stockhistory.batch;
 
-import com.example.antsimulate.stockdata.ingest.service.StockPriceDailyIngestService;
-import com.example.antsimulate.stockdata.ingest.repository.StockItemQueryRepository;
+import com.example.antsimulate.stockhistory.ingest.service.StockPriceDailyIngestService;
+import com.example.antsimulate.stockhistory.ingest.repository.StockItemQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

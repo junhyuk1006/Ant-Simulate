@@ -1,4 +1,4 @@
-package com.example.antsimulate.stockdata.ingest.dto;
+package com.example.antsimulate.stockhistory.ingest.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

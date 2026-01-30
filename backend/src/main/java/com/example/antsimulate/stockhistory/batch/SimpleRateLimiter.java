@@ -1,4 +1,4 @@
-package com.example.antsimulate.stockdata.batch;
+package com.example.antsimulate.stockhistory.batch;
 
 import java.time.Duration;
 import java.util.concurrent.Semaphore;

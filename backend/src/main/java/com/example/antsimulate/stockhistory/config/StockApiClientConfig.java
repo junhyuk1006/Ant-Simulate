@@ -1,4 +1,4 @@
-package com.example.antsimulate.stockdata.config;
+package com.example.antsimulate.stockhistory.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

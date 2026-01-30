@@ -1,4 +1,4 @@
-package com.example.antsimulate.stockdata.batch;
+package com.example.antsimulate.stockhistory.batch;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

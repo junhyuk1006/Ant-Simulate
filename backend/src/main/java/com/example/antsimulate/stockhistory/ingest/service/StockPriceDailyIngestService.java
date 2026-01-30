@@ -1,7 +1,7 @@
-package com.example.antsimulate.stockdata.ingest.service;
+package com.example.antsimulate.stockhistory.ingest.service;
 
-import com.example.antsimulate.stockdata.ingest.client.TwelveDataClient;
-import com.example.antsimulate.stockdata.ingest.dto.TwelveTimeSeriesResponse;
+import com.example.antsimulate.stockhistory.ingest.client.TwelveDataClient;
+import com.example.antsimulate.stockhistory.ingest.dto.TwelveTimeSeriesResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
