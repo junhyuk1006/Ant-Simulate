@@ -4,8 +4,8 @@
   "settings": {
     "width": 2000,
     "height": 2000,
-    "scrollTop": -1031.7535,
-    "scrollLeft": -574.4782,
+    "scrollTop": -931.7535,
+    "scrollLeft": -574.3166,
     "zoomLevel": 0.73,
     "show": 511,
     "database": 4,
@@ -37,7 +37,8 @@
       "EwJwZ1Hd4axFJduRlrj45",
       "7KfUMJVWQzaBbYvYd4K4F",
       "cxq_EyZjPOOLm59Zfc5lJ",
-      "bGfEcSvFfOHwFRkpvaPsa"
+      "bGfEcSvFfOHwFRkpvaPsa",
+      "Wa4OaEosAyI85xyUUM5Fz"
     ],
     "relationshipIds": [
       "P7UMYmnNiHB8H8rMD-m7f",
@@ -199,34 +200,6 @@
           "createAt": 1769081452893
         }
       },
-      "z2NBLG3echJlCEm_1If34": {
-        "id": "z2NBLG3echJlCEm_1If34",
-        "name": "stock_items",
-        "comment": "종목",
-        "columnIds": [
-          "vk3Sr4mzg_3WEOd7LB5DU",
-          "mUSXX1PBvVDDCXTT7aJlI",
-          "5D_UFTNzsBLUrDsUDoEUC"
-        ],
-        "seqColumnIds": [
-          "vk3Sr4mzg_3WEOd7LB5DU",
-          "mUSXX1PBvVDDCXTT7aJlI",
-          "5D_UFTNzsBLUrDsUDoEUC",
-          "_0zHw61E8eG4uWZ9-aqku"
-        ],
-        "ui": {
-          "x": 35.833,
-          "y": 1167.4481,
-          "zIndex": 237,
-          "widthName": 63,
-          "widthComment": 60,
-          "color": ""
-        },
-        "meta": {
-          "updateAt": 1769081790445,
-          "createAt": 1769081615907
-        }
-      },
       "7KfUMJVWQzaBbYvYd4K4F": {
         "id": "7KfUMJVWQzaBbYvYd4K4F",
         "name": "stock_items",
@@ -304,6 +277,7 @@
         "columnIds": [
           "Aq_y7wuc0fdFXD4MkwlkQ",
           "zcxlAKANlnVufy2NQdMSl",
+          "xVf_bXToaaVJHXv_cJ6e0",
           "Z6-SQsSFbW_VI1df2pkzW",
           "pJWfgBqYTPxUepjHIxTcA",
           "4BFkhPE1UroHNM_-orxDu",
@@ -315,6 +289,7 @@
         "seqColumnIds": [
           "Aq_y7wuc0fdFXD4MkwlkQ",
           "zcxlAKANlnVufy2NQdMSl",
+          "xVf_bXToaaVJHXv_cJ6e0",
           "Z6-SQsSFbW_VI1df2pkzW",
           "pJWfgBqYTPxUepjHIxTcA",
           "4BFkhPE1UroHNM_-orxDu",
@@ -332,8 +307,42 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1769342263275,
+          "updateAt": 1771221404830,
           "createAt": 1769341344761
+        }
+      },
+      "Wa4OaEosAyI85xyUUM5Fz": {
+        "id": "Wa4OaEosAyI85xyUUM5Fz",
+        "name": "exchange_rate_daily",
+        "comment": "환율 테이블 (일자 기준)",
+        "columnIds": [
+          "xUtzzidrVCtlPHvel8ga2",
+          "AWePaVR65UCuM703L-em6",
+          "Gkp2z9mDx6nCVTlFfoYET",
+          "eJUiURPdOFR0LbHc4OWJ6",
+          "u1L3Wq9B1dQDBPbPrK8-1",
+          "FBOa9VBWwYfh1xA0HrAhB"
+        ],
+        "seqColumnIds": [
+          "xUtzzidrVCtlPHvel8ga2",
+          "AWePaVR65UCuM703L-em6",
+          "Gkp2z9mDx6nCVTlFfoYET",
+          "eJUiURPdOFR0LbHc4OWJ6",
+          "u1L3Wq9B1dQDBPbPrK8-1",
+          "gFiyZybp7cQnXCOOxHhB2",
+          "FBOa9VBWwYfh1xA0HrAhB"
+        ],
+        "ui": {
+          "x": 171.6036,
+          "y": 1153.087,
+          "zIndex": 381,
+          "widthName": 108,
+          "widthComment": 127,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1771218505971,
+          "createAt": 1771218251004
         }
       }
     },
@@ -898,86 +907,6 @@
           "createAt": 1769081488232
         }
       },
-      "vk3Sr4mzg_3WEOd7LB5DU": {
-        "id": "vk3Sr4mzg_3WEOd7LB5DU",
-        "tableId": "z2NBLG3echJlCEm_1If34",
-        "name": "id",
-        "comment": "",
-        "dataType": "",
-        "default": "",
-        "options": 10,
-        "ui": {
-          "keys": 1,
-          "widthName": 60,
-          "widthComment": 60,
-          "widthDataType": 60,
-          "widthDefault": 60
-        },
-        "meta": {
-          "updateAt": 1769081646847,
-          "createAt": 1769081641225
-        }
-      },
-      "5D_UFTNzsBLUrDsUDoEUC": {
-        "id": "5D_UFTNzsBLUrDsUDoEUC",
-        "tableId": "z2NBLG3echJlCEm_1If34",
-        "name": "stock_name",
-        "comment": "종목명",
-        "dataType": "",
-        "default": "",
-        "options": 0,
-        "ui": {
-          "keys": 0,
-          "widthName": 64,
-          "widthComment": 60,
-          "widthDataType": 60,
-          "widthDefault": 60
-        },
-        "meta": {
-          "updateAt": 1769081712160,
-          "createAt": 1769081641387
-        }
-      },
-      "mUSXX1PBvVDDCXTT7aJlI": {
-        "id": "mUSXX1PBvVDDCXTT7aJlI",
-        "tableId": "z2NBLG3echJlCEm_1If34",
-        "name": "stock_symbol",
-        "comment": "종목코드",
-        "dataType": "",
-        "default": "",
-        "options": 0,
-        "ui": {
-          "keys": 0,
-          "widthName": 73,
-          "widthComment": 60,
-          "widthDataType": 60,
-          "widthDefault": 60
-        },
-        "meta": {
-          "updateAt": 1769081704565,
-          "createAt": 1769081690072
-        }
-      },
-      "_0zHw61E8eG4uWZ9-aqku": {
-        "id": "_0zHw61E8eG4uWZ9-aqku",
-        "tableId": "z2NBLG3echJlCEm_1If34",
-        "name": "",
-        "comment": "",
-        "dataType": "",
-        "default": "",
-        "options": 0,
-        "ui": {
-          "keys": 0,
-          "widthName": 60,
-          "widthComment": 60,
-          "widthDataType": 60,
-          "widthDefault": 60
-        },
-        "meta": {
-          "updateAt": 1769081690248,
-          "createAt": 1769081690248
-        }
-      },
       "DEXusWZZPaqod-D12PbdE": {
         "id": "DEXusWZZPaqod-D12PbdE",
         "tableId": "hw3XPumfIbDX3AyTExWND",
@@ -1505,7 +1434,7 @@
         "comment": "시가",
         "dataType": "NUMERIC",
         "default": "",
-        "options": 0,
+        "options": 8,
         "ui": {
           "keys": 0,
           "widthName": 60,
@@ -1514,7 +1443,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1769342219108,
+          "updateAt": 1771221397331,
           "createAt": 1769341482555
         }
       },
@@ -1545,7 +1474,7 @@
         "comment": "고가",
         "dataType": "NUMERIC",
         "default": "",
-        "options": 0,
+        "options": 8,
         "ui": {
           "keys": 0,
           "widthName": 60,
@@ -1554,7 +1483,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1769342222086,
+          "updateAt": 1771221397807,
           "createAt": 1769341547369
         }
       },
@@ -1565,7 +1494,7 @@
         "comment": "저가",
         "dataType": "NUMERIC",
         "default": "",
-        "options": 0,
+        "options": 8,
         "ui": {
           "keys": 0,
           "widthName": 60,
@@ -1574,7 +1503,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1769342225547,
+          "updateAt": 1771221398342,
           "createAt": 1769341547548
         }
       },
@@ -1585,7 +1514,7 @@
         "comment": "종가",
         "dataType": "NUMERIC",
         "default": "",
-        "options": 0,
+        "options": 8,
         "ui": {
           "keys": 0,
           "widthName": 60,
@@ -1594,7 +1523,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1769342229168,
+          "updateAt": 1771221399114,
           "createAt": 1769341547707
         }
       },
@@ -1605,7 +1534,7 @@
         "comment": "거래량",
         "dataType": "BIGINT",
         "default": "",
-        "options": 0,
+        "options": 8,
         "ui": {
           "keys": 0,
           "widthName": 60,
@@ -1614,7 +1543,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1769342233072,
+          "updateAt": 1771221400070,
           "createAt": 1769341662530
         }
       },
@@ -1625,7 +1554,7 @@
         "comment": "데이터 생성 시각",
         "dataType": "TIMESTAMP",
         "default": "",
-        "options": 0,
+        "options": 8,
         "ui": {
           "keys": 0,
           "widthName": 60,
@@ -1634,7 +1563,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1769342242089,
+          "updateAt": 1771221401090,
           "createAt": 1769341665075
         }
       },
@@ -1645,7 +1574,7 @@
         "comment": "데이터 수정 시각",
         "dataType": "TIMESTAMP",
         "default": "",
-        "options": 0,
+        "options": 8,
         "ui": {
           "keys": 0,
           "widthName": 62,
@@ -1654,8 +1583,168 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1769342253950,
+          "updateAt": 1771221403627,
           "createAt": 1769341665245
+        }
+      },
+      "xUtzzidrVCtlPHvel8ga2": {
+        "id": "xUtzzidrVCtlPHvel8ga2",
+        "tableId": "Wa4OaEosAyI85xyUUM5Fz",
+        "name": "id",
+        "comment": "",
+        "dataType": "BIGINT",
+        "default": "",
+        "options": 10,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1771218475393,
+          "createAt": 1771218276283
+        }
+      },
+      "AWePaVR65UCuM703L-em6": {
+        "id": "AWePaVR65UCuM703L-em6",
+        "tableId": "Wa4OaEosAyI85xyUUM5Fz",
+        "name": "base_currency",
+        "comment": "기준 통화 (예: USD)",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 77,
+          "widthComment": 105,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1771218470856,
+          "createAt": 1771218276627
+        }
+      },
+      "Gkp2z9mDx6nCVTlFfoYET": {
+        "id": "Gkp2z9mDx6nCVTlFfoYET",
+        "tableId": "Wa4OaEosAyI85xyUUM5Fz",
+        "name": "quote_currency",
+        "comment": "변환 대상 통화 (예: KRW)",
+        "dataType": "VARCHAR",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 83,
+          "widthComment": 134,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1771218488537,
+          "createAt": 1771218276835
+        }
+      },
+      "eJUiURPdOFR0LbHc4OWJ6": {
+        "id": "eJUiURPdOFR0LbHc4OWJ6",
+        "tableId": "Wa4OaEosAyI85xyUUM5Fz",
+        "name": "rate_date",
+        "comment": "환율 기준 일자",
+        "dataType": "DATE",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 81,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1771218513657,
+          "createAt": 1771218277235
+        }
+      },
+      "u1L3Wq9B1dQDBPbPrK8-1": {
+        "id": "u1L3Wq9B1dQDBPbPrK8-1",
+        "tableId": "Wa4OaEosAyI85xyUUM5Fz",
+        "name": "rate",
+        "comment": "해당 일자의 환율 값",
+        "dataType": "NUMERIC",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 108,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1771218521754,
+          "createAt": 1771218307300
+        }
+      },
+      "gFiyZybp7cQnXCOOxHhB2": {
+        "id": "gFiyZybp7cQnXCOOxHhB2",
+        "tableId": "Wa4OaEosAyI85xyUUM5Fz",
+        "name": "",
+        "comment": "",
+        "dataType": "",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1771218307428,
+          "createAt": 1771218307428
+        }
+      },
+      "FBOa9VBWwYfh1xA0HrAhB": {
+        "id": "FBOa9VBWwYfh1xA0HrAhB",
+        "tableId": "Wa4OaEosAyI85xyUUM5Fz",
+        "name": "created_at",
+        "comment": "생성 시간",
+        "dataType": "TIMESTAMP",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 65,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1771218541385,
+          "createAt": 1771218439607
+        }
+      },
+      "xVf_bXToaaVJHXv_cJ6e0": {
+        "id": "xVf_bXToaaVJHXv_cJ6e0",
+        "tableId": "bGfEcSvFfOHwFRkpvaPsa",
+        "name": "trade_date",
+        "comment": "거래일",
+        "dataType": "DATE",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1771221422372,
+          "createAt": 1771221373236
         }
       }
     },
@@ -1744,90 +1833,6 @@
           "createAt": 1769081488236
         }
       },
-      "Oq27eYvCf0KJLQZYgqx7W": {
-        "id": "Oq27eYvCf0KJLQZYgqx7W",
-        "identification": false,
-        "relationshipType": 16,
-        "startRelationshipType": 2,
-        "start": {
-          "tableId": "z2NBLG3echJlCEm_1If34",
-          "columnIds": [
-            "vk3Sr4mzg_3WEOd7LB5DU"
-          ],
-          "x": 251.333,
-          "y": 1167.4481,
-          "direction": 4
-        },
-        "end": {
-          "tableId": "hw3XPumfIbDX3AyTExWND",
-          "columnIds": [
-            "DEXusWZZPaqod-D12PbdE"
-          ],
-          "x": 252.6052,
-          "y": 976.2106,
-          "direction": 8
-        },
-        "meta": {
-          "updateAt": 1769081752292,
-          "createAt": 1769081752292
-        }
-      },
-      "FfD7hF-XnBhoQbNZFXqOR": {
-        "id": "FfD7hF-XnBhoQbNZFXqOR",
-        "identification": false,
-        "relationshipType": 8,
-        "startRelationshipType": 2,
-        "start": {
-          "tableId": "z2NBLG3echJlCEm_1If34",
-          "columnIds": [
-            "vk3Sr4mzg_3WEOd7LB5DU"
-          ],
-          "x": 0,
-          "y": 0,
-          "direction": 8
-        },
-        "end": {
-          "tableId": "EwJwZ1Hd4axFJduRlrj45",
-          "columnIds": [
-            "RM1wORXAkXrpviqyzIFm6"
-          ],
-          "x": 0,
-          "y": 0,
-          "direction": 8
-        },
-        "meta": {
-          "updateAt": 1769081800031,
-          "createAt": 1769081800031
-        }
-      },
-      "ZDTWyUB_0rG1n0zm9ciYU": {
-        "id": "ZDTWyUB_0rG1n0zm9ciYU",
-        "identification": false,
-        "relationshipType": 16,
-        "startRelationshipType": 2,
-        "start": {
-          "tableId": "7KfUMJVWQzaBbYvYd4K4F",
-          "columnIds": [
-            "8kJVks_jhWoop9FdhZdCg"
-          ],
-          "x": 763.8691,
-          "y": 993.1784,
-          "direction": 1
-        },
-        "end": {
-          "tableId": "hw3XPumfIbDX3AyTExWND",
-          "columnIds": [
-            "JHZHlhR8slfDJYrNtUmLC"
-          ],
-          "x": 794.0914,
-          "y": 827.608,
-          "direction": 8
-        },
-        "meta": {
-          "updateAt": 1769081899397,
-          "createAt": 1769081899397
-        }
-      },
       "Pf01JqLABvKuir_F64eFu": {
         "id": "Pf01JqLABvKuir_F64eFu",
         "identification": false,
@@ -1854,34 +1859,6 @@
         "meta": {
           "updateAt": 1769081926747,
           "createAt": 1769081926747
-        }
-      },
-      "YYsbTmDd9cLmcalo09GQO": {
-        "id": "YYsbTmDd9cLmcalo09GQO",
-        "identification": false,
-        "relationshipType": 16,
-        "startRelationshipType": 2,
-        "start": {
-          "tableId": "zgC3ZqQuoE2denDfOND49",
-          "columnIds": [
-            "fagEH7ymHag5b6k_1u1sG"
-          ],
-          "x": 732.0442,
-          "y": 405.86080000000004,
-          "direction": 8
-        },
-        "end": {
-          "tableId": "cxq_EyZjPOOLm59Zfc5lJ",
-          "columnIds": [
-            "eyKULYekOAkLfLa1oHg6F"
-          ],
-          "x": 735.7418,
-          "y": 604.6645,
-          "direction": 4
-        },
-        "meta": {
-          "updateAt": 1769082291718,
-          "createAt": 1769082291718
         }
       },
       "txBWH-8YYmzBO0CD-gHMr": {

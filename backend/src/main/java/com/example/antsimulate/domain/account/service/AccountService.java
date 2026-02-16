@@ -22,7 +22,7 @@ public class AccountService {
      *  계좌 조회
      **/
     public GetAccountResponse getAccount(Long userId){
-        Account account = accountRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = accountRepository.findByUserId(userId).orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_NOT_FOUND));
         return new GetAccountResponse(account.getId(), account.getStartAsset(), account.getTotalAsset());
     }
 

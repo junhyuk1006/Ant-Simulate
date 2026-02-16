@@ -18,6 +18,7 @@ import { CandlestickChart } from "@/components/ui/candlestick-chart";
 import { stocksApi } from "@/services/api";
 import type { StockItem, StockChartData } from "@/types";
 import { useTheme } from "@/hooks";
+import { useCurrency } from "@/hooks/useCurrency";
 
 // 차트 주기 타입
 type ChartPeriod = "daily" | "weekly" | "monthly";
@@ -35,6 +36,7 @@ interface TradingCenterProps {
 
 export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, onSelectedStockFromSearchHandled }: TradingCenterProps) {
   const { isDark } = useTheme();
+  const { formatPrice, convertPrice, currency } = useCurrency();
   const [selectedStock, setSelectedStock] = useState<StockItem | null>(null);
   const [chartData, setChartData] = useState<StockChartData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -50,42 +52,66 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
 
   // Layout Height Synchronization
   useEffect(() => {
+    // requestAnimationFrame을 사용하여 렌더링이 완전히 끝난 후 측정
     const measureHeight = () => {
-      const getPaddedHeight = (el: HTMLDivElement | null) => {
-        if (!el) return 0;
-        const h = el.getBoundingClientRect().height;
-        const parent = el.parentElement;
-        if (parent) {
-            const style = window.getComputedStyle(parent);
-            const py = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
-            return h + py;
-        }
-        return h;
+      // 1. Center와 Right의 내부 실제 컨텐츠 높이 측정
+      // ref가 걸린 div들의 getBoundingClientRect 사용
+      
+      const centerEl = centerContentRef.current;
+      const rightEl = rightContentRef.current;
+      
+      const getCardHeight = (contentEl: HTMLDivElement | null) => {
+             if (!contentEl) return 0;
+             const contentH = contentEl.getBoundingClientRect().height;
+             
+             // 부모 Card의 패딩을 더해서 전체 높이 계산
+             const parent = contentEl.parentElement; 
+             if (parent) {
+                 const style = window.getComputedStyle(parent);
+                 const py = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+                 // border 등도 포함해야 정확
+                 return contentH + py;
+             }
+             return contentH;
       };
 
-      const centerH = getPaddedHeight(centerContentRef.current);
-      const rightH = getPaddedHeight(rightContentRef.current);
+      const centerH = getCardHeight(centerEl);
+      const rightH = getCardHeight(rightEl);
       
       const maxH = Math.max(centerH, rightH);
-      if (maxH > 0) {
-        setBaseHeight(maxH);
+      
+      // 약간의 오차 방지 및 최소 높이 보장
+      if (maxH > 100) { 
+         // 값이 줄어드는 것도 허용해야 함 (Left가 더 길어졌을 때 Center에 맞추기 위해)
+         setBaseHeight(prev => {
+             // 1px 차이 등 미세한 변화 무시하여 불필요한 리렌더 방지
+             if (Math.abs(prev - maxH) < 2) return prev;
+             return maxH;
+         });
       }
     };
+    
+    // 측정 함수 실행 (디바운스 없이 즉각 반응)
+    // requestAnimationFrame으로 브라우저 렌더링 최적화
+    const optimizedMeasure = () => {
+        window.requestAnimationFrame(measureHeight);
+    };
 
-    const observer = new ResizeObserver(measureHeight);
+    const observer = new ResizeObserver(optimizedMeasure);
     
     if (centerContentRef.current) observer.observe(centerContentRef.current);
     if (rightContentRef.current) observer.observe(rightContentRef.current);
 
-    measureHeight();
-    // Periodic check for safety
-    const interval = setInterval(measureHeight, 1000);
+    // 컴포넌트 마운트/업데이트 시 즉시 측정
+    optimizedMeasure();
+    // 이미지 로드 등으로 인한 지연 변경 대비 (타이머 단축)
+    const interval = setInterval(optimizedMeasure, 500);
 
     return () => {
       observer.disconnect();
       clearInterval(interval);
     };
-  }, [selectedStock, chartData, likedStocks]);
+  }, [selectedStock, chartData, likedStocks, chartPeriod]); // chartPeriod 의존성 추가
 
   // 상단바 검색에서 종목 선택시 반영
   useEffect(() => {
@@ -234,8 +260,29 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
   // 관심종목 목록 (검색 필터 없이 전체 표시)
   const filteredStocks = likedStocks;
 
-  // 차트에서 통계 계산 (집계된 데이터 기준)
-  const displayData = aggregateChartData;
+  // 차트 데이터 변환 (환율 적용)
+  const convertedData = useMemo(() => {
+    if (!selectedStock) return aggregateChartData;
+    const sourceCurrency = selectedStock.stockCountry === 'US' ? 'USD' : 'KRW';
+
+    // 이미 보고있는 통화와 같으면 변환 불필요
+    if (sourceCurrency === currency) {
+      return aggregateChartData;
+    }
+
+    return aggregateChartData.map(item => ({
+      ...item,
+      open: convertPrice(item.open, sourceCurrency),
+      high: convertPrice(item.high, sourceCurrency),
+      low: convertPrice(item.low, sourceCurrency),
+      close: convertPrice(item.close, sourceCurrency),
+      // volume은 거래량이므로 통화 변환 대상이 아님
+    }));
+  }, [aggregateChartData, selectedStock, currency, convertPrice]);
+
+
+  // 차트에서 통계 계산 (변환된 데이터 기준)
+  const displayData = convertedData;
   const chartStats = displayData.length >= 2 ? {
     currentPrice: displayData[displayData.length - 1]?.close || 0,
     previousPrice: displayData[displayData.length - 2]?.close || 0,
@@ -259,16 +306,18 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
   const isPositive = chartStats.changePercent >= 0;
 
   // Mock 호가창 데이터 (WebSocket 연결 전)
+  // chartStats.currentPrice는 이미 변환된 가격임.
+  // 따라서 여기서 계산되는 호가들도 변환된 가격 기준이 됨.
   const mockOrderBook = {
     asks: [
-      { price: Math.round(chartStats.currentPrice * 1.004), quantity: 150, total: 0 },
-      { price: Math.round(chartStats.currentPrice * 1.002), quantity: 230, total: 0 },
-      { price: Math.round(chartStats.currentPrice * 1.001), quantity: 340, total: 0 },
+      { price: chartStats.currentPrice * 1.004, quantity: 150, total: 0 },
+      { price: chartStats.currentPrice * 1.002, quantity: 230, total: 0 },
+      { price: chartStats.currentPrice * 1.001, quantity: 340, total: 0 },
     ].map(ask => ({ ...ask, total: ask.price * ask.quantity })),
     bids: [
-      { price: Math.round(chartStats.currentPrice * 0.999), quantity: 280, total: 0 },
-      { price: Math.round(chartStats.currentPrice * 0.998), quantity: 190, total: 0 },
-      { price: Math.round(chartStats.currentPrice * 0.996), quantity: 120, total: 0 },
+      { price: chartStats.currentPrice * 0.999, quantity: 280, total: 0 },
+      { price: chartStats.currentPrice * 0.998, quantity: 190, total: 0 },
+      { price: chartStats.currentPrice * 0.996, quantity: 120, total: 0 },
     ].map(bid => ({ ...bid, total: bid.price * bid.quantity })),
   };
 
@@ -356,7 +405,12 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
 
         {/* Chart Section - 가운데: 자동 높이 조절 */}
         <div className="xl:order-2 order-1 h-full">
+          {/* Card에 h-full을 주면 Grid Row가 늘어날 때 같이 늘어남.
+              배경색 처리를 위해 h-full을 Card에 주는 것은 유지.
+              하지만 측정 대상인 내부 div는 늘어나면 안 됨.
+          */}
           <Card className="glass-card rounded-2xl p-6 flex flex-col h-full">
+            {/* 측정용 div: h-full 없이, 내용물 높이만 가짐 */}
             <div ref={centerContentRef} className="flex flex-col w-full">
               {selectedStock && (
             <>
@@ -384,7 +438,7 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
                     ) : (
                       <>
                         <span className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                          {selectedStock.stockCountry === 'US' ? '$' : '₩'}{chartStats.currentPrice.toLocaleString()}
+                          {formatPrice(chartStats.currentPrice, currency)}
                         </span>
                         <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${
                           isPositive ? "bg-red-500/20 text-red-500" : "bg-blue-500/20 text-blue-500"
@@ -443,9 +497,9 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-4 border-t border-white/5">
                 {[
-                  { label: "시가", value: chartStats.open.toLocaleString(), color: isDark ? "text-white" : "text-slate-900" },
-                  { label: "고가", value: chartStats.high.toLocaleString(), color: "text-red-500" },
-                  { label: "저가", value: chartStats.low.toLocaleString(), color: "text-blue-500" },
+                  { label: "시가", value: formatPrice(chartStats.open, currency), color: isDark ? "text-white" : "text-slate-900" },
+                  { label: "고가", value: formatPrice(chartStats.high, currency), color: "text-red-500" },
+                  { label: "저가", value: formatPrice(chartStats.low, currency), color: "text-blue-500" },
                   { label: "거래량", value: (chartStats.volume / 1000000).toFixed(2) + "M", color: isDark ? "text-white" : "text-slate-900" },
                 ].map((item) => (
                   <div key={item.label} className={`rounded-xl py-5 px-4 ${isDark ? 'bg-white/5' : 'bg-slate-100'}`}>
@@ -471,8 +525,12 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
 
         {/* Order Section - 오른쪽: 자동 높이 조절 */}
         <div className="xl:order-3 order-3 h-full">
-          <div ref={rightContentRef} className="space-y-4 flex flex-col h-full">
-            <Card className="glass-card rounded-2xl p-4 flex-1">
+          {/* h-full 제거: 내부 컨텐츠의 실제 높이만 측정하기 위함. 
+              시각적인 full height는 부모(grid item)와 Card의 flex-1 등으로 처리하려 했으나, 
+              측정용 ref가 있는 div는 늘어나면 안 됨.
+          */}
+          <div ref={rightContentRef} className="space-y-4 flex flex-col">
+            <Card className="glass-card rounded-2xl p-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className={`font-semibold ${isDark ? 'text-white' : 'text-slate-900'}`}>호가창</h3>
               <div className="flex items-center gap-1 text-xs text-slate-400">
@@ -488,7 +546,9 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
                     className="absolute right-0 top-0 bottom-0 bg-indigo-500/10" 
                     style={{ width: `${(ask.quantity / 500) * 100}%` }}
                   />
-                  <span className="text-indigo-400 font-medium relative z-10">{ask.price.toLocaleString()}</span>
+                  <span className="text-indigo-400 font-medium relative z-10 w-full text-left truncate">
+                    {formatPrice(ask.price, currency)}
+                  </span>
                   <span className={`text-right relative z-10 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{ask.quantity}</span>
                   <span className="text-slate-500 text-right text-xs relative z-10">
                     {(ask.total / 1000000).toFixed(1)}M
@@ -499,7 +559,7 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
 
             <div className={`py-3 mb-3 border-y text-center ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
               <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                {chartStats.currentPrice.toLocaleString()}
+                {formatPrice(chartStats.currentPrice, currency)}
               </div>
               <div className="text-slate-400 text-xs mt-0.5">현재가</div>
             </div>
@@ -511,7 +571,9 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
                     className="absolute right-0 top-0 bottom-0 bg-emerald-500/10" 
                     style={{ width: `${(bid.quantity / 500) * 100}%` }}
                   />
-                  <span className="text-emerald-400 font-medium relative z-10">{bid.price.toLocaleString()}</span>
+                  <span className="text-emerald-400 font-medium relative z-10 w-full text-left truncate">
+                    {formatPrice(bid.price, currency)}
+                  </span>
                   <span className={`text-right relative z-10 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>{bid.quantity}</span>
                   <span className="text-slate-500 text-right text-xs relative z-10">
                     {(bid.total / 1000000).toFixed(1)}M
@@ -557,12 +619,14 @@ export function TradingCenter({ onStockDetail, userId, selectedStockFromSearch, 
                 <div className={`p-3 rounded-xl ${isDark ? 'bg-white/5' : 'bg-slate-100'}`}>
                   <div className="flex justify-between text-sm mb-1">
                     <span className="text-slate-400">예수금</span>
-                    <span className={`font-medium ${isDark ? 'text-white' : 'text-slate-900'}`}>10,000,000원</span>
+                    <span className={`font-medium ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                      {formatPrice(10000000, 'KRW')}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-400">주문 가능</span>
                     <span className="text-emerald-400 font-medium">
-                      {chartStats.currentPrice > 0 ? Math.floor(10000000 / chartStats.currentPrice) : 0}주
+                      {chartStats.currentPrice > 0 ? Math.floor(convertPrice(10000000, 'KRW') / chartStats.currentPrice) : 0}주
                     </span>
                   </div>
                 </div>

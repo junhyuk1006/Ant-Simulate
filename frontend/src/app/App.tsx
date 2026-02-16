@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { LoginScreen, SignupScreen, TradingCenter, Portfolio, BacktestingLab, MyPage, MarketNews, StockDetailScreen } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useTheme } from "@/hooks";
+import { useTheme, useCurrency } from "@/hooks";
 import type { StockItem } from "@/types";
 import { stocksApi } from "@/services/api";
 import { 
@@ -41,6 +41,7 @@ export default function App() {
   const [nickname, setNickname] = useState<string>("");
   const [selectedStockForDetail, setSelectedStockForDetail] = useState<StockItem | null>(null);
   const { isDark, toggleTheme } = useTheme();
+  const { currency, toggleCurrency } = useCurrency();
   const [headerSearchQuery, setHeaderSearchQuery] = useState("");
   const [headerSearchFocused, setHeaderSearchFocused] = useState(false);
   const [allStockItems, setAllStockItems] = useState<StockItem[]>([]);
@@ -95,7 +96,8 @@ export default function App() {
   useEffect(() => {
     const savedUserId = localStorage.getItem("ant_user_id");
     const savedNickname = localStorage.getItem("ant_nickname");
-    if (savedUserId) {
+    const sessionLoggedIn = sessionStorage.getItem("ant_session_logged_in");
+    if (savedUserId && sessionLoggedIn === "true") {
       setUserId(Number(savedUserId));
       setNickname(savedNickname || "");
       setIsLoggedIn(true);
@@ -113,6 +115,7 @@ export default function App() {
     setUserId(loginUserId);
     setNickname(loginNickname);
     setIsLoggedIn(true);
+    sessionStorage.setItem("ant_session_logged_in", "true");
     setCurrentScreen("trading");
   };
 
@@ -120,6 +123,7 @@ export default function App() {
     setUserId(signupUserId);
     setNickname(signupNickname);
     setIsLoggedIn(true);
+    sessionStorage.setItem("ant_session_logged_in", "true");
     setCurrentScreen("trading");
   };
 
@@ -130,6 +134,7 @@ export default function App() {
   const handleLogout = () => {
     localStorage.removeItem("ant_user_id");
     localStorage.removeItem("ant_nickname");
+    sessionStorage.removeItem("ant_session_logged_in");
     setUserId(null);
     setNickname("");
     setIsLoggedIn(false);
@@ -283,6 +288,43 @@ export default function App() {
                   </div>
                 )}
               </div>
+
+              {/* Currency Toggle */}
+              <Button
+                variant="ghost"
+                onClick={toggleCurrency}
+                className={`rounded-xl h-10 px-2 border transition-all ${
+                  isDark 
+                    ? 'bg-white/5 hover:bg-white/10' 
+                    : 'bg-slate-100/50 hover:bg-slate-200/50'
+                } ${
+                  /* Dynamic Border Color */
+                  currency === 'USD'
+                    ? isDark ? 'border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.1)]' : 'border-emerald-500/30'
+                    : isDark ? 'border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.1)]' : 'border-indigo-500/30'
+                }`}
+                title="통화 변경 (KRW / USD)"
+              >
+                <div className="flex items-center gap-1">
+                  {/* USD */}
+                  <div className={`flex items-center justify-center w-6 h-6 rounded-lg border-[1.5px] transition-all duration-200 ${
+                    currency === 'USD' 
+                      ? 'border-emerald-500 text-emerald-500 bg-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.3)] font-bold opacity-100 scale-110' 
+                      : 'border-transparent text-slate-400 font-normal opacity-50 scale-90'
+                  }`}>
+                    <span className="text-xs">$</span>
+                  </div>
+                  
+                  {/* KRW */}
+                  <div className={`flex items-center justify-center w-6 h-6 rounded-lg border-[1.5px] transition-all duration-200 ${
+                    currency === 'KRW'
+                      ? 'border-indigo-500 text-indigo-500 bg-indigo-500/20 shadow-[0_0_10px_rgba(99,102,241,0.3)] font-bold opacity-100 scale-110'
+                      : 'border-transparent text-slate-400 font-normal opacity-50 scale-90'
+                  }`}>
+                    <span className="text-xs">₩</span>
+                  </div>
+                </div>
+              </Button>
 
               {/* Notifications */}
               <div className="relative">

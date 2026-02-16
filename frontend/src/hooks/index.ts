@@ -6,3 +6,4 @@ export { useAuth } from "./useAuth";
 export { useStocks, useStockDetail, useStockSearch } from "./useStocks";
 export { usePortfolio } from "./usePortfolio";
 export { useTheme, type Theme } from "./useTheme";
+export { useCurrency, CurrencyProvider } from "./useCurrency";

@@ -20,6 +20,12 @@ public class StockItems {
     @Column(nullable = false, name = "stock_symbol")
     private String stockSymbol;
 
-    @Column(nullable = false, name= "stock_name")
+    @Column(nullable = false, name = "stock_name")
     private String stockName;
+
+    @Column(nullable = false, name = "stock_type")
+    private String stockType;
+
+    @Column(nullable = false, name = "stock_country")
+    private String stockCountry;
 }

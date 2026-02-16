@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { accountApi, userApi } from "@/services/api";
 import type { Account } from "@/types";
 import { useTheme } from "@/hooks";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface UserInfo {
   email: string;
@@ -22,6 +23,7 @@ interface MyPageProps {
 
 export function MyPage({ userId, nickname }: MyPageProps) {
   const { isDark } = useTheme();
+  const { formatPrice, currency } = useCurrency();
   const [account, setAccount] = useState<Account | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUserLoading, setIsUserLoading] = useState(true);
@@ -321,13 +323,13 @@ export function MyPage({ userId, nickname }: MyPageProps) {
                   <div className="bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 p-5 rounded-xl">
                     <div className={`text-sm mb-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>현재 시드 머니</div>
                     <div className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                      {account.startAsset.toLocaleString()}원
+                      {formatPrice(account.startAsset, 'KRW')}
                     </div>
                   </div>
                   <div className="bg-gradient-to-br from-emerald-500/20 to-green-500/20 border border-emerald-500/30 p-5 rounded-xl">
                     <div className={`text-sm mb-1 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>총 자산</div>
                     <div className={`text-2xl font-bold ${profitRate >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                      {account.totalAsset.toLocaleString()}원
+                      {formatPrice(account.totalAsset, 'KRW')}
                     </div>
                     <div className={`text-sm mt-1 ${profitRate >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {profitRate >= 0 ? '+' : ''}{profitRate.toFixed(2)}%
@@ -421,7 +423,7 @@ export function MyPage({ userId, nickname }: MyPageProps) {
                     <p className={`font-medium ${tx.type === 'buy' ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {tx.type === 'buy' ? '매수' : '매도'} {tx.quantity}주
                     </p>
-                    <p className="text-slate-400 text-sm">{(tx.price * tx.quantity).toLocaleString()}원</p>
+                    <p className="text-slate-400 text-sm">{formatPrice(tx.price * tx.quantity, 'KRW')}</p>
                   </div>
                 </div>
               ))}

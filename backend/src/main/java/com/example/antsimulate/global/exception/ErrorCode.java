@@ -18,6 +18,9 @@ public enum ErrorCode {
     // Account
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "계좌를 찾을 수 없습니다."),
 
+    // ExchangeRateDaily
+    EXCHANGE_RATE_NOT_FOUND(HttpStatus.NOT_FOUND, "환율정보를 찾을 수 없습니다."),
+
     // Backtest
     BACKTEST_API_ERROR(HttpStatus.BAD_GATEWAY, "백테스트 서버 통신 중 오류가 발생했습니다."),
 

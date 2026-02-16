@@ -39,3 +39,6 @@ export * as ordersApi from "./orders";
 
 // 사용자 API
 export * as userApi from "./user";
+
+// 환율 API
+export * as exchangeApi from "./exchange";

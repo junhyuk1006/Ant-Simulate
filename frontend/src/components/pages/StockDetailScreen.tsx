@@ -20,6 +20,7 @@ import { createChart, ColorType, CrosshairMode, IChartApi, ISeriesApi, Candlesti
 import { stocksApi } from "@/services/api";
 import type { StockItem, StockChartData } from "@/types";
 import { useTheme } from "@/hooks";
+import { useCurrency } from "@/hooks/useCurrency";
 
 import {
   Popover,
@@ -48,6 +49,7 @@ export function StockDetailScreen({
   isLiked = false 
 }: StockDetailScreenProps) {
   const { isDark } = useTheme();
+  const { currency, formatPrice, convertPrice } = useCurrency();
   const priceChartContainerRef = useRef<HTMLDivElement>(null);
   const volumeChartContainerRef = useRef<HTMLDivElement>(null);
   const priceChartRef = useRef<IChartApi | null>(null);
@@ -153,9 +155,26 @@ export function StockDetailScreen({
       case "20Y": startDate = new Date(now.getFullYear() - 20, now.getMonth(), now.getDate()); break;
       case "MAX": default: return periodData;
     }
+
+    
+    // 환율 변환 적용
+    const sourceCurrency = stockItem.stockCountry === 'US' ? 'USD' : 'KRW';
+    
+    // 만약 현재 currency와 원본 화폐가 다르면 값 변환
+    if (sourceCurrency !== currency) {
+      return periodData.filter(d => new Date(d.date) >= startDate).map(item => ({
+        ...item,
+        open: convertPrice(item.open, sourceCurrency),
+        high: convertPrice(item.high, sourceCurrency),
+        low: convertPrice(item.low, sourceCurrency),
+        close: convertPrice(item.close, sourceCurrency),
+        // volume은 변환 안함
+      }));
+    }
     
     return periodData.filter(d => new Date(d.date) >= startDate);
-  }, [periodData, timeRange]);
+  }, [periodData, timeRange, stockItem, currency, convertPrice]);
+
 
   // 이동평균 계산
   const calculateMA = (data: StockChartData[], period: number): LineData[] => {
@@ -266,6 +285,7 @@ export function StockDetailScreen({
     // 캔들스틱 데이터 설정
     const candleData: CandlestickData[] = filteredData.map(d => ({
       time: d.date as Time,
+      // useCurrency hook에서 처리된 데이터가 이미 변환되어 있음
       open: d.open,
       high: d.high,
       low: d.low,
@@ -488,11 +508,11 @@ export function StockDetailScreen({
           <div>
             <div className="flex items-center gap-4">
               <span className={`text-4xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                {stockItem.stockCountry === 'US' ? '$' : '₩'}{stats.currentPrice.toLocaleString(undefined, {maximumFractionDigits: 2})}
+                {formatPrice(stats.currentPrice, currency)}
               </span>
               <div className={`flex items-center gap-1 px-3 py-1.5 rounded-xl ${isPositive ? "bg-red-500/20 text-red-500" : "bg-blue-500/20 text-blue-500"}`}>
                 {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-                <span className="font-semibold">{isPositive ? "+" : ""}{stats.change.toLocaleString(undefined, {maximumFractionDigits: 2})} ({isPositive ? "+" : ""}{stats.changePercent.toFixed(2)}%)</span>
+                <span className="font-semibold">{isPositive ? "+" : ""}{formatPrice(Math.abs(stats.change), currency)} ({isPositive ? "+" : ""}{stats.changePercent.toFixed(2)}%)</span>
               </div>
             </div>
             <p className={`text-sm mt-2 ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>선택 기간 대비 수익률</p>
@@ -501,11 +521,11 @@ export function StockDetailScreen({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className={`${isDark ? 'bg-white/5' : 'bg-slate-100'} rounded-xl p-3`}>
               <div className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>기간 고가</div>
-              <div className="text-red-500 font-semibold">{stats.periodHigh.toLocaleString(undefined, {maximumFractionDigits: 2})}</div>
+              <div className="text-red-500 font-semibold">{formatPrice(stats.periodHigh, currency)}</div>
             </div>
             <div className={`${isDark ? 'bg-white/5' : 'bg-slate-100'} rounded-xl p-3`}>
               <div className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>기간 저가</div>
-              <div className="text-blue-500 font-semibold">{stats.periodLow.toLocaleString(undefined, {maximumFractionDigits: 2})}</div>
+              <div className="text-blue-500 font-semibold">{formatPrice(stats.periodLow, currency)}</div>
             </div>
             <div className={`${isDark ? 'bg-white/5' : 'bg-slate-100'} rounded-xl p-3`}>
               <div className={`text-xs ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>평균 거래량</div>

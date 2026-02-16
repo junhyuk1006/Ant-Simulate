@@ -11,12 +11,14 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { runBacktest } from "@/services/api/backtest";
 import * as stocksApi from "@/services/api/stocks";
 import type { BacktestRequest, BacktestResult, StockItem, BacktestStrategyType, BacktestOrderType } from "@/types";
+import { useCurrency } from "@/hooks/useCurrency";
 
 // 백엔드/프론트엔드 필드명 호환을 위한 헬퍼 함수
 const getStockSymbol = (stock: StockItem): string => stock.stockSymbol || stock.symbol || "";
 const getStockName = (stock: StockItem): string => stock.stockName || stock.name || "";
 
 export function BacktestingLab() {
+  const { formatPrice, currency } = useCurrency();
   const [showResults, setShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [splitCount, setSplitCount] = useState([5]);
@@ -202,7 +204,7 @@ export function BacktestingLab() {
                 <div className="space-y-2">
                   <Label className="text-slate-300 text-sm flex items-center gap-1.5">
                     <Coins className="w-4 h-4 text-slate-500" />
-                    초기 투자금
+                    초기 투자금 ({currency === 'KRW' ? '₩' : '$'})
                   </Label>
                   <Input 
                     type="number"
@@ -211,6 +213,9 @@ export function BacktestingLab() {
                     placeholder="초기 투자 금액을 입력하세요"
                     className="bg-white/5 border-white/10 text-white rounded-xl h-11"
                   />
+                  <p className="text-xs text-slate-500 mt-1">
+                    {formatPrice(initialCapital, currency)}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -404,7 +409,7 @@ export function BacktestingLab() {
               <Card className="glass-card rounded-2xl p-5 hover:glow-sm transition-all">
                 <div className="text-slate-400 text-sm mb-2">최종 자산</div>
                 <div className="text-indigo-400 text-2xl font-bold">
-                  {(result.finalAssets / 10000).toFixed(1)}만원
+                  {formatPrice(result.finalAssets, currency)}
                 </div>
               </Card>
 
@@ -418,7 +423,7 @@ export function BacktestingLab() {
               <Card className="glass-card rounded-2xl p-5 hover:glow-sm transition-all">
                 <div className="text-slate-400 text-sm mb-2">총 수익금</div>
                 <div className={`text-2xl font-bold ${result.totalReturnPct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                  {result.totalReturnPct >= 0 ? '+' : ''}{((result.finalAssets - initialCapital) / 10000).toFixed(1)}만원
+                  {result.totalReturnPct >= 0 ? '+' : ''}{formatPrice(result.finalAssets - initialCapital, currency)}
                 </div>
               </Card>
             </div>
@@ -450,12 +455,12 @@ export function BacktestingLab() {
 
                 <div className="space-y-3">
                   {[
-                    { label: "초기 자본", value: `${(initialCapital / 10000).toLocaleString()}만원`, color: "text-white" },
+                    { label: "초기 자본", value: formatPrice(initialCapital, currency), color: "text-white" },
                     { label: "테스트 기간", value: `${startDate} ~ ${endDate}`, color: "text-slate-400" },
                     { label: "전략 유형", value: strategyType === "aggressive" ? "공격적" : "방어적", color: "text-purple-400" },
                     { label: "주문 방식", value: orderType === "BATCH" ? "일괄 매수" : `분할 매수 (${splitCount[0]}회)`, color: "text-slate-400" },
-                  ].map((item) => (
-                    <div key={item.label} className="flex items-center justify-between py-2 border-b border-white/5">
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center justify-between py-2 border-b border-white/5">
                       <span className="text-slate-400">{item.label}</span>
                       <span className={`font-semibold ${item.color}`}>{item.value}</span>
                     </div>

@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { TrendingUp, DollarSign, Wallet, PieChart as PieChartIcon, ArrowUpRight, ArrowDownRight, BarChart3 } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid } from "recharts";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const mockHoldings = [
   {
@@ -55,6 +56,7 @@ const performanceData = [
 ];
 
 export function Portfolio() {
+  const { formatPrice, currency } = useCurrency();
   const totalAssets = 20000000;
   const totalInvestment = 18000000;
   const totalProfitLoss = 400000;
@@ -68,7 +70,7 @@ export function Portfolio() {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-slate-400 text-sm mb-1">총 자산</div>
-              <div className="text-white text-2xl font-bold">{totalAssets.toLocaleString()}원</div>
+              <div className="text-white text-2xl font-bold">{formatPrice(totalAssets, 'KRW')}</div>
               <div className="text-emerald-400 text-xs mt-1 flex items-center gap-1">
                 <ArrowUpRight className="w-3 h-3" />
                 전일 대비 +1.2%
@@ -84,7 +86,7 @@ export function Portfolio() {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-slate-400 text-sm mb-1">총 투자금</div>
-              <div className="text-white text-2xl font-bold">{totalInvestment.toLocaleString()}원</div>
+              <div className="text-white text-2xl font-bold">{formatPrice(totalInvestment, 'KRW')}</div>
               <div className="text-slate-500 text-xs mt-1">투자 비중 82%</div>
             </div>
             <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-3 rounded-xl group-hover:scale-110 transition-transform">
@@ -98,7 +100,7 @@ export function Portfolio() {
             <div>
               <div className="text-slate-400 text-sm mb-1">총 평가손익</div>
               <div className="text-emerald-400 text-2xl font-bold">
-                +{totalProfitLoss.toLocaleString()}원
+                +{formatPrice(totalProfitLoss, 'KRW')}
               </div>
               <div className="text-emerald-400 text-xs mt-1 flex items-center gap-1">
                 <TrendingUp className="w-3 h-3" />
@@ -223,7 +225,7 @@ export function Portfolio() {
                 />
                 <span className="text-slate-300 font-medium">{asset.name}</span>
               </div>
-              <div className="text-white text-lg font-bold">{asset.value.toLocaleString()}원</div>
+              <div className="text-white text-lg font-bold">{formatPrice(asset.value, 'KRW')}</div>
               <div className="text-slate-500 text-sm mt-1">
                 {((asset.value / totalAssets) * 100).toFixed(1)}%
               </div>
@@ -264,18 +266,18 @@ export function Portfolio() {
                     {holding.quantity.toLocaleString()}주
                   </td>
                   <td className="text-right text-slate-300 p-4">
-                    {holding.avgPrice.toLocaleString()}원
+                    {formatPrice(holding.avgPrice, 'KRW')}
                   </td>
                   <td className="text-right text-white font-medium p-4">
-                    {holding.currentPrice.toLocaleString()}원
+                    {formatPrice(holding.currentPrice, 'KRW')}
                   </td>
                   <td className="text-right text-white font-medium p-4">
-                    {holding.value.toLocaleString()}원
+                    {formatPrice(holding.value, 'KRW')}
                   </td>
                   <td className={`text-right p-4 font-semibold ${holding.profitLoss >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                     <div className="flex items-center justify-end gap-1">
                       {holding.profitLoss >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
-                      {holding.profitLoss >= 0 ? '+' : ''}{holding.profitLoss.toLocaleString()}원
+                      {holding.profitLoss >= 0 ? '+' : ''}{formatPrice(Math.abs(holding.profitLoss), 'KRW')}
                     </div>
                   </td>
                   <td className={`text-right p-4 ${holding.profitRate >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
