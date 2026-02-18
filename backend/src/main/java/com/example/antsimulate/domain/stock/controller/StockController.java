@@ -18,13 +18,13 @@ public class StockController {
 
     @GetMapping
     public ResponseEntity<?> getStockItems(){
-        List<StockItems> response = stockService.getStockItems();
+        List<StockItems> response = stockService.getStockItemsList();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{stockItemId}")
     public ResponseEntity<?> getStockPriceDaily(@PathVariable Long stockItemId){
-        List<GetStockPriceDailyResponse> response = stockService.getStockPriceDaily(stockItemId);
+        List<GetStockPriceDailyResponse> response = stockService.getStockPriceDailyList(stockItemId);
         return ResponseEntity.ok(response); // 상태코드 200
     }
 

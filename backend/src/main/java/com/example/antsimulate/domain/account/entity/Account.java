@@ -1,6 +1,8 @@
 package com.example.antsimulate.domain.account.entity;
 
 import com.example.antsimulate.domain.user.entity.User;
+import com.example.antsimulate.global.exception.BusinessException;
+import com.example.antsimulate.global.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,5 +40,22 @@ public class Account {
     @PrePersist
     void onCreate(){
         this.createdAt = OffsetDateTime.now(ZoneOffset.UTC);
+    }
+
+    /**
+     * 매수
+     */
+    public void buy(int price){
+        if(this.totalAsset < price){
+            throw new BusinessException(ErrorCode.INSUFFICIENT_BALANCE);
+        }
+        this.totalAsset -= price;
+    }
+
+    /**
+     * 매도
+     */
+    public void sell(int price){
+        this.totalAsset += price;
     }
 }

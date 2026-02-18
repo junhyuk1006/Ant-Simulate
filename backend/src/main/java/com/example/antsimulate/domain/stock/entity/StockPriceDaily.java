@@ -3,6 +3,7 @@ package com.example.antsimulate.domain.stock.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import java.time.ZoneOffset;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class StockPriceDaily {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

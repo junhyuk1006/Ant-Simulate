@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StockPriceDailyRepository extends JpaRepository<StockPriceDaily, Long> {
 
@@ -23,8 +24,10 @@ public interface StockPriceDailyRepository extends JpaRepository<StockPriceDaily
             ) 
             FROM StockPriceDaily spd
             INNER JOIN spd.stockItems si
-            WHERE spd.stockItems.id = :stockId
+            WHERE spd.stockItems.id = :stockItemId
             ORDER BY spd.tradeDate
         """)
-    List<GetStockPriceDailyResponse> findDailyPrices(@Param("stockId") Long stockId);
+    List<GetStockPriceDailyResponse> findDailyPricesList(@Param("stockItemId") Long stockItemId);
+
+    Optional<StockPriceDaily> findTop1ByStockItems_IdOrderByTradeDateDesc(Long StockItemId);
 }

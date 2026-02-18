@@ -17,6 +17,12 @@ public enum ErrorCode {
 
     // Account
     ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "계좌를 찾을 수 없습니다."),
+    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "잔고가 부족합니다."),
+    // StockItems
+    STOCK_ITEMS_NOT_FOUND(HttpStatus.NOT_FOUND, "종목 정보를 찾을 수 없습니다."),
+
+    // StockPriceDaily
+    STOCK_PRICE_DAILY_DESC1_NOT_FOUND(HttpStatus.NOT_FOUND, "최근 가격 데이터를 찾을 수 없습니다."),
 
     // ExchangeRateDaily
     EXCHANGE_RATE_NOT_FOUND(HttpStatus.NOT_FOUND, "환율정보를 찾을 수 없습니다."),

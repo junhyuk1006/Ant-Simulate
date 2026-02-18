@@ -4,11 +4,14 @@ import com.example.antsimulate.domain.stock.dto.GetStockPriceDailyResponse;
 import com.example.antsimulate.domain.stock.dto.LikeStockItemsResponse;
 import com.example.antsimulate.domain.stock.entity.LikeStockItems;
 import com.example.antsimulate.domain.stock.entity.StockItems;
+import com.example.antsimulate.domain.stock.entity.StockPriceDaily;
 import com.example.antsimulate.domain.stock.repository.LikeStockItemsRepository;
 import com.example.antsimulate.domain.stock.repository.StockItemsRepository;
 import com.example.antsimulate.domain.stock.repository.StockPriceDailyRepository;
 import com.example.antsimulate.domain.user.entity.User;
 import com.example.antsimulate.domain.user.repository.UserRepository;
+import com.example.antsimulate.global.exception.BusinessException;
+import com.example.antsimulate.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,17 +27,32 @@ public class StockService {
     private final UserRepository userRepository;
 
     /**
+     * 종목 정보 조회
+     */
+    public StockItems getStockItems(Long stockItemId){
+        return stockItemsRepository.findById(stockItemId).orElseThrow(() -> new BusinessException(ErrorCode.STOCK_ITEMS_NOT_FOUND));
+    }
+
+    /**
+     *  종목(일봉 데이터) 조회
+     **/
+    public StockPriceDaily getStockPriceDaily(Long stockItemId){
+        return stockPriceDailyRepository.findTop1ByStockItems_IdOrderByTradeDateDesc(stockItemId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.STOCK_PRICE_DAILY_DESC1_NOT_FOUND));
+    }
+
+    /**
      *  차트 리스트 조회
      **/
-    public List<StockItems> getStockItems(){
+    public List<StockItems> getStockItemsList(){
         return stockItemsRepository.findAll();
     }
 
     /**
      *  종목별 차트 조회
      **/
-    public List<GetStockPriceDailyResponse> getStockPriceDaily(Long stockItemId){
-        return stockPriceDailyRepository.findDailyPrices(stockItemId);
+    public List<GetStockPriceDailyResponse> getStockPriceDailyList(Long stockItemId){
+        return stockPriceDailyRepository.findDailyPricesList(stockItemId);
     }
 
     /**

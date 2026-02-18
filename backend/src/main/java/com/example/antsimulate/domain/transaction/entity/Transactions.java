@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -34,8 +35,14 @@ public class Transactions {
     @Column(nullable = false, name = "type")
     private TransactionType transactionType;
 
-    @Column(nullable = false, name="price")
+    @Column(nullable = false, name= "price")
     private int price;
+
+    @Column(nullable = false, name = "quantity")
+    private int quantity;
+
+    @Column(name = "exchange_rate")
+    private BigDecimal exchangeRate;
 
     @Column(nullable = false, name = "created_at")
     private OffsetDateTime createdAt;
